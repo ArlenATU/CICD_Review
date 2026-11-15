@@ -10,7 +10,7 @@
 Review the code **as submitted in the original examination**. Do not change the original repository, branch or pull request. Check your own Group A or Group B examination paper and award marks only for evidence present in the original submission.
 
 ### Task 1 — /40
-**My mark: 10
+**My mark: 15
 **Evidence from the original code (files, methods, working or missing requirements):  
 I've created booking entity
 @Entity
@@ -37,20 +37,19 @@ public class Booking {
 **My mark: 0
 **Evidence from the original code:**  
 
-**Total self-assessed original examination mark: /100**
+**Total self-assessed original examination mark: 15/100
 
 **Checkpoint:** Commit this completed self-assessment as the **first review commit in your new repository**, before you modify or add application code. The lecturer decides the official original examination mark.
 
 ## 2. Corrections and improvements in my new project
-
-Start from a **fresh copy of the starter template for your own exam group**, in a **new GitHub repository**. You may consult or selectively reuse your own original examination code, but the new project must demonstrate that you understand and can correct it. Do not change your original examination submission.
-
-Describe **two or three important problems** in your original code. For each, explain what was wrong, which class or method you changed in the new project, and why the corrected approach works.
-
 **Problem and correction 1:**  
-
+In the exam, I only make a simple Booking entity. I forgot to make DTOs and validation, so bad data could enter.
+Created BookingRequest and BookingResponse classes and added validation rules like @NotBlank and @Min.
+DTOs keep the database safe, and validation catches bad input before it goes to the database.
 **Problem and correction 2:**  
-
+Task 2 got 0 marks because I did not write controller methods and did not check if room capacity is enough
+Added BookingController with POST and GET methods, and service logic to check room capacity.
+It stops users from booking when too many people try to fit in a small room, and gives correct error codes.
 **Problem and correction 3 (optional):**  
 
 ## 3. API testing and evidence
