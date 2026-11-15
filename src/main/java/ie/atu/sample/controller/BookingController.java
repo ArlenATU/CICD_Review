@@ -29,4 +29,10 @@ public class BookingController {
         BookingResponse booking = bookingService.getBookingById(id);
         return ResponseEntity.ok(booking);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<java.util.List<BookingResponse>> searchBookings(@RequestParam String roomName) {
+        java.util.List<BookingResponse> results = bookingService.searchBookingsByRoomName(roomName);
+        return ResponseEntity.ok(results);
+    }
 }

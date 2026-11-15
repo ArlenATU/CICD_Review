@@ -22,19 +22,16 @@ public class BookingService {
     }
 
     public BookingResponse createBooking(BookingRequest request) {
-        // 1. Find the room by name to check its capacity
         Room room = roomRepository.findAll().stream()
                 .filter(r -> r.getName().equalsIgnoreCase(request.getRoomName()))
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found with name: " + request.getRoomName()));
 
-        // 2. Check if count exceeds room capacity
         if (request.getCount() > room.getCapacity()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Attendee count (" + request.getCount() + ") exceeds room capacity (" + room.getCapacity() + ")");
         }
 
-        // 3. Create and save booking using your exact entity field names
         Booking booking = new Booking();
         booking.setRoomName(room.getName());
         booking.setOrganiserName(request.getOrganiserName());
@@ -60,5 +57,11 @@ public class BookingService {
                 booking.getCount(),
                 booking.getStatus()
         );
+    }
+
+    public java.util.List<BookingResponse> searchBookingsByRoomName(String roomName) {
+        return bookingRepository.findByRoomNameOrderedByCountDesc(roomName).stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 }
