@@ -11,7 +11,23 @@ Review the code **as submitted in the original examination**. Do not change the 
 
 ### Task 1 — /40
 **My mark: 10
-**Evidence from the original code (files, methods, working or missing requirements):**  
+**Evidence from the original code (files, methods, working or missing requirements):  
+I've created booking entity
+@Entity
+@Data
+@NoArgsConstructor
+public class Booking {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    private Long id;
+    private String OrganiserName;
+    private int count;
+    private String status;
+    private String RoomName;
+}
+
 
 ### Task 2 — /40
 **My mark: 0
