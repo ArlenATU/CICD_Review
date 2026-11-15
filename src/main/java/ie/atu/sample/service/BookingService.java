@@ -22,21 +22,23 @@ public class BookingService {
     }
 
     public BookingResponse createBooking(BookingRequest request) {
-        // 1. Check if room exists (returns 404 if missing)
-        Room room = roomRepository.findById(request.getRoomId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found with id: " + request.getRoomId()));
+        // 1. Find the room by name to check its capacity
+        Room room = roomRepository.findAll().stream()
+                .filter(r -> r.getName().equalsIgnoreCase(request.getRoomName()))
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Room not found with name: " + request.getRoomName()));
 
-        // 2. Check if attendee count exceeds room capacity (returns 400 if too many people)
-        if (request.getAttendeeCount() > room.getCapacity()) {
+        // 2. Check if count exceeds room capacity
+        if (request.getCount() > room.getCapacity()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Attendee count (" + request.getAttendeeCount() + ") exceeds room capacity (" + room.getCapacity() + ")");
+                    "Attendee count (" + request.getCount() + ") exceeds room capacity (" + room.getCapacity() + ")");
         }
 
-        // 3. Create and save booking
+        // 3. Create and save booking using your exact entity field names
         Booking booking = new Booking();
-        booking.setRoom(room);
+        booking.setRoomName(room.getName());
         booking.setOrganiserName(request.getOrganiserName());
-        booking.setAttendeeCount(request.getAttendeeCount());
+        booking.setCount(request.getCount());
         booking.setStatus("ACTIVE");
 
         Booking savedBooking = bookingRepository.save(booking);
@@ -53,10 +55,9 @@ public class BookingService {
     private BookingResponse mapToResponse(Booking booking) {
         return new BookingResponse(
                 booking.getId(),
-                booking.getRoom().getId(),
-                booking.getRoom().getName(),
+                booking.getRoomName(),
                 booking.getOrganiserName(),
-                booking.getAttendeeCount(),
+                booking.getCount(),
                 booking.getStatus()
         );
     }
