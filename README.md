@@ -57,28 +57,43 @@ It stops users from booking when too many people try to fit in a small room, and
 Use Swagger UI or another HTTP client. For **at least four meaningful checks**, record the request/input, expected result, actual HTTP status/response, and pass/fail. Include unsuccessful cases; a running application alone is not enough.
 
 **Test 1 — successful booking request:**  
-- Request / input:  
-- Expected:  
-- Actual HTTP status / body:  
-- Pass / fail:  
+- Request / input:  {
+  "count": 18,
+  "organiserName": "Aofie Byrne",
+  "roomName": "Lab 201"
+  }
+- Expected: 201 Created
+- Actual HTTP status / body: {
+  "timestamp": "2026-11-15T22:02:31.437Z",
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/api/bookings"
+  } 
+- Pass / fail:  fail
 
 **Test 2 — invalid input or excessive attendee count:**  
-- Request / input:  
-- Expected:  
-- Actual HTTP status / body:  
-- Pass / fail:  
+- Request / input:  {
+- "roomName": "Meeting Room 3", "organiserName": "John", "count": 25
+- }
+- Expected: 400 Bad Request 
+- Actual HTTP status / body: {
+- "error": "Attendee count (25) exceeds room capacity (10)"
+- }
+- Pass / fail:  Pass
 
 **Test 3 — missing booking or room:**  
-- Request / input:  
-- Expected:  
-- Actual HTTP status / body:  
-- Pass / fail:  
+- Request / input:  GET /api/bookings/999
+- Expected:  404 Not Found
+- Actual HTTP status / body:  {
+- "error": "Booking not found with id: 999"
+- }
+- Pass / fail:  Pass
 
 **Test 4 — requirement specific to my group:**  
-- Request / input:  
-- Expected:  
+- Request / input: Lab 201
+- Expected:  200 Ok
 - Actual HTTP status / body:  
-- Pass / fail:  
+- Pass / fail:  fail
 
 **Group A:** Demonstrate `GET /api/bookings/search?roomName=...` using an exact room name, bookings ordered by attendee count descending, and an empty list for no matches. Add checks if necessary to show all three behaviours.
 
@@ -86,12 +101,12 @@ Use Swagger UI or another HTTP client. For **at least four meaningful checks**, 
 
 ## 4. Reflection
 
-**What did I understand during the examination but struggle to implement?**  
+I understood how the models and database logic needed to work in my head, but during the exam I got stressed and forgot how to write the DTOs, validation, and controller methods. 
 
 **Which Spring Boot, JPA, validation, JPQL or OpenFeign concept became clearer after correcting my code? Give a specific example.**  
-
+JPQL query became much clearer. For example, writing SELECT b FROM Booking b WHERE b.RoomName = :roomName ORDER BY b.count DESC made it easy to query and sort data directly from the repository without writing manual sorting logic in Java.
 **What will I do differently in my next coding test or API development task?**  
-
+Next time, I will build the project step by step. I will create the entity first, test simple requests in Swagger early, and not leave controller mapping and search queries until the very end.
 ## Review lab assessment — 20 marks
 
 - Honest original self-assessment with code evidence: **4 marks**
